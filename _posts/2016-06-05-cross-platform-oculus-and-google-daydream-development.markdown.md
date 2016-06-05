@@ -23,4 +23,4 @@ This uses code from the following projects:
 * [Unity Project Download](https://developer.oculus.com/downloads/game-engines/1.3.0/Oculus_Sample_Framework_for_Unity_5_Project/ "Source Code Download")
  
 
-[Documentation](https://github.com/polats/gvr-unity-sdk/wiki/Steps-to-Unify-Daydream-Castle-Defense-and-Oculus-Sample-Framework) and [Unity Project source code](https://github.com/polats/gvr-unity-sdk/tree/master/Samples/CastleDefense) on these links
+[Documentation](https://github.com/polats/gvr-unity-sdk/wiki) and [Unity Project source code](https://github.com/polats/gvr-unity-sdk/tree/master/Samples/CastleDefense) on these links
