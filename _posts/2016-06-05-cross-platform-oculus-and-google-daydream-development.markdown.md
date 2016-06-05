@@ -4,7 +4,7 @@ title: 'Cross Platform Oculus and Google Daydream Development'
 date: '2016-05-27 16:27:47 +0800'
 tags:
   - 'vr oculus daydream code'
-category: 'vr oculus daydream code'
+category: vr
 ---
 
 ![Flying Castle](http://i.giphy.com/BRBSiPddmQQlW.gif "Flying Castle!")
