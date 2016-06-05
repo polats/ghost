@@ -7,7 +7,7 @@ tags:
 category: 'vr oculus daydream code'
 ---
 
-[![Flying Castle](http://i.giphy.com/BRBSiPddmQQlW.gif "Flying Castle!")]
+![Flying Castle](http://i.giphy.com/BRBSiPddmQQlW.gif "Flying Castle!")
 
 This prototype unifies the camera and input controls for the Oculus Rift and Google Daydream. This uses code from the following projects:
 
