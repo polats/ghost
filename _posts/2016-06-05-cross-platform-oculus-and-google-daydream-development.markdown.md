@@ -13,12 +13,11 @@ This prototype unifies the camera and input controls for the Oculus Rift and Goo
 
 1. The Google Daydream Castle Defense Example 
 
- * https://github.com/googlevr/gvr-unity-sdk/tree/master/Samples/CastleDefense
+ * [Github Link](https://github.com/googlevr/gvr-unity-sdk/tree/master/Samples/CastleDefense)
 
 1. The Oculus Sample Framework Code
  * [Overview](https://developer.oculus.com/blog/introducing-the-oculus-sample-framework-for-unity-5/ "Overview")
  * [Source Code Download](https://developer.oculus.com/downloads/game-engines/1.3.0/Oculus_Sample_Framework_for_Unity_5_Project/ "Source Code Download")
  
-Documentation: https://github.com/polats/gvr-unity-sdk/wiki/Steps-to-Unify-Daydream-Castle-Defense-and-Oculus-Sample-Framework
- 
-Source code at: https://github.com/polats/gvr-unity-sdk/tree/master/Samples/CastleDefense
+
+[Documentation](https://github.com/polats/gvr-unity-sdk/wiki/Steps-to-Unify-Daydream-Castle-Defense-and-Oculus-Sample-Framework) and [Source](https://github.com/polats/gvr-unity-sdk/tree/master/Samples/CastleDefense) on these links
