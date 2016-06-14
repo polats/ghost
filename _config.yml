@@ -7,7 +7,7 @@
 
 # Site settings
 title: polats.github.io
-email: paulgadi@gmail.com
+email: polats@me.com
 description: > # this means to ignore newlines until "baseurl:"
   Paul Gadi | Altitude Games | VR, Game Development
 baseurl: "" # the subpath of your site, e.g. /blog
