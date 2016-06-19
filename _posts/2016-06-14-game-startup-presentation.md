@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 'Game Startups Presentation for DLSU Manila Technology Summit 2016'
-featured-image: http://i.giphy.com/BRBSiPddmQQlW.gif
-thumbnail-image: http://i.giphy.com/BRBSiPddmQQlW.gif
+featured-image: https://scontent.fmnl3-2.fna.fbcdn.net/v/t1.0-9/10449474_1754742411423063_6839967369206763219_n.jpg?oh=f2fcad05c09954132c9a2420260ede62&oe=57E7A7BA
+thumbnail-image: https://scontent.fmnl3-2.fna.fbcdn.net/v/t1.0-9/10449474_1754742411423063_6839967369206763219_n.jpg?oh=f2fcad05c09954132c9a2420260ede62&oe=57E7A7BA
 comments: true
 categories: ['Presentations', 'Game Development']
 

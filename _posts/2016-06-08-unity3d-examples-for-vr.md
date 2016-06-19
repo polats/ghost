@@ -3,8 +3,8 @@ layout: post
 title: 'Unity3D Examples for VR'
 date: '2016-05-27 16:27:47 +0800'
 category: Virtual Reality
-featured-image: http://i.giphy.com/BRBSiPddmQQlW.gif
-thumbnail-image: http://i.giphy.com/BRBSiPddmQQlW.gif
+featured-image: https://vr.google.com/cardboard/images/design-lab.png
+thumbnail-image: https://vr.google.com/cardboard/images/design-lab.png
 comments: true
 
 ---
