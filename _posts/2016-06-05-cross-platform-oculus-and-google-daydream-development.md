@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Cross Platform Oculus and Google Daydream Development'
-date: '2016-05-27 16:27:47 +0800'
+date: '2016-07-09 16:27:47 +0800'
 category: Virtual Reality
 featured-image: http://i.giphy.com/BRBSiPddmQQlW.gif
 thumbnail-image: http://i.giphy.com/BRBSiPddmQQlW.gif
