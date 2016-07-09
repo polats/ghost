@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Cross Platform Oculus and Google Daydream Development'
-date: '2016-05-27 16:27:47 +0800'
+date: '2016-07-09 16:27:47 +0800'
 category: Virtual Reality
 featured-image: http://i.giphy.com/BRBSiPddmQQlW.gif
 thumbnail-image: http://i.giphy.com/BRBSiPddmQQlW.gif
@@ -16,6 +16,8 @@ In this prototype we unified the camera and input controls for the Oculus Rift a
 The code should also allow cross-platform compilation for Oculus / Gear VR and Google Daydream phones.
 
 ![Flying Castle](http://i.giphy.com/BRBSiPddmQQlW.gif "Flying Castle!")
+
+[Project Source Code can be found here.](https://github.com/polats/gvr-unity-sdk/tree/master/Samples/CastleDefense)
 
 This uses code from the following projects:
 
