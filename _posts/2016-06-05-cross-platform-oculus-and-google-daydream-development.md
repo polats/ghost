@@ -17,7 +17,9 @@ The code should also allow cross-platform compilation for Oculus / Gear VR and G
 
 ![Flying Castle](http://i.giphy.com/BRBSiPddmQQlW.gif "Flying Castle!")
 
-This uses code from the following projects:
+[Project Code can be found here](https://github.com/polats/gvr-unity-sdk/tree/master/Samples/CastleDefense)
+
+This prototype uses code from the following projects:
 
 1. The Google Daydream Castle Defense Example
 * [Github Link](https://github.com/googlevr/gvr-unity-sdk/tree/master/Samples/CastleDefense)
