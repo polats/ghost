@@ -7,8 +7,8 @@
     <title>Hello Crypto!</title>
     <script src="//aframe.io/releases/0.5.0/aframe.min.js"></script>
     <script src="//cdn.rawgit.com/donmccurdy/aframe-extras/v3.13.1/dist/aframe-extras.min.js"></script>
-    <script src="assets/components/ground.js"></script>
-    <script src="assets/shaders/skyGradient.js"></script>
+    <script src="ground.js"></script>
+    <script src="skyGradient.js"></script>
     <script>
 /**
  * Rain of Entities component.
@@ -23,7 +23,7 @@ AFRAME.registerComponent('rain', {
   schema: {
     tagName:    { default: 'a-cylinder' },
     components: { default: ['dynamic-body', 'force-pushable', 'color|#FFD700',
-                            'height|0.03', 'radius|0.125', 'material|src:url(assets/icon-192.png);metalness:0.7'] },
+                            'height|0.03', 'radius|0.125', 'material|src:url(icon-192.png);metalness:0.7'] },
     maxCount:   { default: 100, min: 0 },
     interval:   { default: 50, min: 0 },
     lifetime:   { default: 5000, min: 0 },
