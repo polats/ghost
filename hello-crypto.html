@@ -21,22 +21,40 @@
         <div class="sidebar__wrap__inner">
 
           <div class="list examples-list">
-            <h2 class="page-title">Hello Crypto</h2>
+            <h2 class="page-title" id="page-title">Hello Crypto</h2>
             <h3 class="page-content">The <a href='https://en.wikipedia.org/wiki/%22Hello,_World!%22_program'>"Hello World"</a>
-              of blockchain and cryptogames! Learn how to: (1) create an ERC 20 token, (2) integrate it onto an app, and (3) deploy it on the blockchain. Check out the <a href='https://github.com/polats/hello-crypto'>source code on Github.</a></h3>
+              of blockchain and cryptogames! Learn how to: (1) interact with the Ethereum blockchain in your app, (2) create your own ERC20 token, and (3) deploy it on the blockchain. Check out the <a href='https://github.com/polats/hello-crypto'>source code on Github.</a></h3>
 
           </div>
 
-          <a href="/docs/" class="mobile-get-started get-started">
+          <a id='rainbutton' class="mobile-get-started get-started">
             (ノ ˘_˘)ノ 。゜。ﾟ
           </a>
-          <a href="/docs/" class="mobile-put-back get-started">
-            .｡.｡. .｡.ノ( º _ ºノ)
-          </a>
 
-          <h3 class="wallet-info">
-            Your browser needs to support an ERC20 wallet like Metamask.
-            <a href='https://github.com/polats/hello-crypto' >Read more about wallets and cryptogames on this link.</a>
+          <h3 class="metamask-prompt" id="metamask-prompt">
+            Your browser must have the Metamask extension installed.
+          </h3>
+
+          <!--
+          <h3 class="wallet-info" id="wallet-info">
+            Your ETH:
+          </h3>
+          -->
+          <h3 class="wallet-info" id="key">
+            Your ETH:
+          </h3>
+
+          <h3 class="wallet-info" id="ethbal">
+            Your ETH:
+          </h3>
+
+          <h3 class="wallet-info" id="simbal">
+            Your ETH:
+          </h3>
+
+
+          <h3 class="getting-started-info">
+            <a href='https://medium.com/cryptogamegroup/the-cryptogame-hello-world-make-it-rain-erc20-tokens-74454993ed49' >Read more about getting started here.</a>
           </h3>
 
           <div class="list examples-list blog-list">
@@ -56,6 +74,11 @@
         </div>
       </div>
     </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="web3.min.js"></script>
+    <script src="truffle-contract.min.js"></script>
+    <script src="app.js"></script>
 
 </body>
 </html>
