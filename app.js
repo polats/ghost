@@ -44,7 +44,9 @@ window.onload = function()
         if(!error)
         {
             walletInfo.ETHBalance = web3.fromWei(result, "ether").toFixed(2) + " ETH";
-            rainObject.data.maxDrops = web3.fromWei(result, "ether");
+            try {
+            rainObject.dsdata.maxDrops = web3.fromWei(result, "ether");
+          } catch(e){}
             displayWallet();
         }
         else
