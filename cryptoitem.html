@@ -1,6 +1,6 @@
 <html lang="en">
 	<head>
-		<title>Convex object breaking example</title>
+		<title>In-game Item Demo</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		<style>
@@ -28,6 +28,17 @@
 
 			a {
 				color: #a06851;
+			}
+
+			#cursor {
+				position: fixed;
+			  top: 50%;
+			  left: 50%;
+				width: 20px;
+				height: 20px;
+			  margin-top: -10px;
+			  margin-left: -10px;
+				background-image: url('textures/cursor.png');
 			}
 
 			#blocker {
@@ -85,7 +96,7 @@
 
 	<div id="info">Physics threejs demo with convex objects breaking in real time<br />Press mouse to throw balls and move the camera.</div>
 	<div id="container"><br /><br /><br /><br /><br />Loading...</div>
-
+	<div id="cursor"/>
 
 	<script src="js/three.js"></script>
 	<script src="js/libs/ammo.js"></script>
@@ -656,10 +667,6 @@
 			controls.update();
 			*/
 
-			controls = new THREE.PointerLockControls( camera );
-			scene.add( controls.getObject() );
-
-
 			var onKeyDown = function ( event ) {
 
 				switch ( event.keyCode ) {
@@ -725,10 +732,15 @@
 
 			window.addEventListener( 'mousedown', function( event ) {
 
+				if (controls.enabled == false) return;
+				/*
 				mouseCoords.set(
 					( event.clientX / window.innerWidth ) * 2 - 1,
 					- ( event.clientY / window.innerHeight ) * 2 + 1
 				);
+				*/
+
+				mouseCoords.set(0, 0);
 
 				raycaster.setFromCamera( mouseCoords, camera );
 
@@ -759,6 +771,10 @@
 				action.reset().play();
 
 			}, false );
+
+			controls = new THREE.PointerLockControls( camera );
+			scene.add( controls.getObject() );
+
 
 		}
 
