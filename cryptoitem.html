@@ -24,10 +24,11 @@
 				position: absolute;
 				top: 0px; width: 100%;
 				padding: 5px;
+				color: #ffffff;
 			}
 
 			a {
-				color: #a06851;
+				color: aqua;
 			}
 
 			#cursor {
@@ -88,13 +89,13 @@
 			<div id="instructions">
 				<span style="font-size:40px">Click to play</span>
 				<br />
-				(W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+				(W, A, S, D = Move, MOUSE = Look around, ESC = pause)
 			</div>
 
 		</div>
 
 
-	<div id="info">Physics threejs demo with convex objects breaking in real time<br />Press mouse to throw balls and move the camera.</div>
+	<div id="info">In-game Item Demo<br />Find out more here: <a href="https://medium.com/@polats/turning-an-in-game-item-into-a-cryptoitem-part-1-b3802525bf20">Turning An In-game Item Into A Cryptoitem</a></div>
 	<div id="container"><br /><br /><br /><br /><br />Loading...</div>
 	<div id="cursor"/>
 
@@ -690,11 +691,12 @@
 						moveRight = true;
 						break;
 
+					/*
 					case 32: // space
 						if ( canJump === true ) velocity.y += 30;
 						canJump = false;
 						break;
-
+				  */
 				}
 
 			};
