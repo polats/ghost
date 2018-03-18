@@ -114,6 +114,8 @@
 		}
 
 		// - Global variables -
+		var mixer;
+		var clips;
 
 		// Graphics variables
 		var container, stats;
@@ -272,6 +274,9 @@
 				weapon = group.scene;
 
 				camera.add( group.scene );
+
+				clips = group.animations;
+				mixer = new THREE.AnimationMixer(group.scene);
 
 				repositionWeapon();
 
@@ -748,6 +753,11 @@
 
 				bullets.push(ball);
 
+				// animate gun
+				var action = mixer.clipAction(clips[0]);
+				action.repetitions = 1;
+				action.reset().play();
+
 			}, false );
 
 		}
@@ -775,8 +785,8 @@
 			weapon.scale.z = 0.01;
 			weapon.position.x = 0.3 * (camera.aspect - 0.2);
 			weapon.position.y = -0.3;
-			weapon.position.z = -0.85;
-			weapon.rotation.y = - 0.3 * (Math.PI / 12);
+			weapon.position.z = -0.5;
+			weapon.rotation.y = -12 * (Math.PI / 12);
 
 
 		}
@@ -830,7 +840,7 @@
 				}
 
 				prevTime = time;
-
+				mixer.update(delta);
 			}
 
 			render();
