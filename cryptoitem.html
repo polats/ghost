@@ -81,23 +81,36 @@
 
 			}
 
+			#ammo {
+				position: fixed;
+				bottom: 20px;
+				right: 20px;
+				padding: 8px;
+				color: #fff;
+				background-color: #555;
+				opacity: 0.7;
+				font-size:30px;
+
+			}
+
 		</style>
 	</head>
 	<body>
 		<div id="blocker">
 
 			<div id="instructions">
-				<span style="font-size:40px">Click to play</span>
+				<span style="font-size:40px">Click to Play</span>
 				<br />
-				(W, A, S, D = Move, MOUSE = Look around, ESC = pause)
+				(W, A, S, D = Move, MOUSE = Look around, ESC = Pause)
 			</div>
 
 		</div>
 
 
-	<div id="info">In-game Item Demo<br />Find out more here: <a href="https://medium.com/@polats/turning-an-in-game-item-into-a-cryptoitem-part-1-b3802525bf20">Turning An In-game Item Into A Cryptoitem</a></div>
+	<div id="info">In-game Item Demo (works on Chrome on desktop)<br />More info here: <a href="https://medium.com/@polats/what-makes-an-in-game-item-a-cryptoitem-part-1-b3802525bf20">What Makes An In-Game Item A CryptoItem?</a></div>
 	<div id="container"><br /><br /><br /><br /><br />Loading...</div>
-	<div id="cursor"/>
+	<div id="cursor"></div>
+	<div id="ammo">BULLETS: </div>
 
 	<script src="js/three.js"></script>
 	<script src="js/libs/ammo.js"></script>
@@ -105,6 +118,7 @@
 
 	<script src="js/Detector.js"></script>
 	<script src="js/libs/stats.min.js"></script>
+	<script src="js/libs/dat.gui.min.js"></script>
 	<script src="js/ConvexObjectBreaker.js"></script>
 	<script src="js/QuickHull.js"></script>
 	<script src="js/geometries/ConvexGeometry.js"></script>
@@ -125,9 +139,40 @@
 			document.getElementById( 'container' ).innerHTML = "";
 		}
 
+		const INITIAL_BULLET_COUNT = 10;
 		// - Global variables -
 		var mixer;
 		var clips;
+		var playerdata =
+		{
+			bulletCount: INITIAL_BULLET_COUNT,
+			fbdataInternal: null,
+			fbdataListener: function(val) {},
+			get isLoggedIn()
+			{
+				return this.fbdataInternal != null;
+			},
+			set fbdata(val) {
+				this.fbdataInternal = val;
+				this.fbdataListener(val);
+			},
+			get fbdata() {
+				return this.fbdataInternal;
+			},
+			registerListener: function(listener)
+			{
+				this.fbdataListener = listener;
+			}
+		};
+
+		var gunSettings =
+		{
+			bulletColor: [0, 0, 0],
+			bulletSpeed: 120,
+			bulletPower: 10,
+			bulletSize: 0.1
+		}
+
 
 		// Graphics variables
 		var container, stats;
@@ -217,6 +262,10 @@
 			document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
 			document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
 
+			playerdata.registerListener(function(val) {
+				updateGameState(val);
+			});
+
 			instructions.addEventListener( 'click', function ( event ) {
 
 				instructions.style.display = 'none';
@@ -255,6 +304,132 @@
 		var velocity = new THREE.Vector3();
 		var direction = new THREE.Vector3();
 
+
+		// This is called with the results from from FB.getLoginStatus().
+	  function statusChangeCallback(response) {
+	    console.log('statusChangeCallback');
+	    console.log(response);
+	    // The response object is returned with a status field that lets the
+	    // app know the current login status of the person.
+	    // Full docs on the response object can be found in the documentation
+	    // for FB.getLoginStatus().
+	    if (response.status === 'connected') {
+	      // Logged into your app and Facebook.
+	      testAPI();
+	    } else {
+				createLoggedOutPanel();
+
+	      // The person is not logged into your app or we are unable to tell.
+	      console.log( 'Please log into this app.');
+	    }
+	  }
+
+	  // This function is called when someone finishes with the Login
+	  // Button.  See the onlogin handler attached to it in the sample
+	  // code below.
+	  function checkLoginState() {
+	    FB.getLoginStatus(function(response) {
+	      statusChangeCallback(response);
+	    });
+	  }
+
+	  window.fbAsyncInit = function() {
+	    FB.init({
+	      appId      : '1844172412466338',
+	      cookie     : true,  // enable cookies to allow the server to access
+	                          // the session
+	      xfbml      : true,  // parse social plugins on this page
+	      version    : 'v2.8' // use graph api version 2.8
+	    });
+
+	    // Now that we've initialized the JavaScript SDK, we call
+	    // FB.getLoginStatus().  This function gets the state of the
+	    // person visiting this page and can return one of three states to
+	    // the callback you provide.  They can be:
+	    //
+	    // 1. Logged into your app ('connected')
+	    // 2. Logged into Facebook, but not your app ('not_authorized')
+	    // 3. Not logged into Facebook and can't tell if they are logged into
+	    //    your app or not.
+	    //
+	    // These three cases are handled in the callback function.
+
+	    FB.getLoginStatus(function(response) {
+	      statusChangeCallback(response);
+	    });
+
+	  };
+
+	  // Load the SDK asynchronously
+	  (function(d, s, id) {
+	    var js, fjs = d.getElementsByTagName(s)[0];
+	    if (d.getElementById(id)) return;
+	    js = d.createElement(s); js.id = id;
+	    js.src = "https://connect.facebook.net/en_US/sdk.js";
+	    fjs.parentNode.insertBefore(js, fjs);
+	  }(document, 'script', 'facebook-jssdk'));
+
+	  function createPlayer(fbdata)
+	  {
+	    // create player
+	    const url = "https://us-central1-augmented-path-196206.cloudfunctions.net/set";
+	    fetch(url, {
+	        method : "POST",
+	        body : JSON.stringify({
+	          kind: "Player",
+	          key: fbdata.id,
+	          value: JSON.stringify({
+	            name: fbdata.name
+	          })
+	        })
+	    }).then(
+	        response => response.text()
+	    ).then(
+	        html => console.log(html)
+	    );
+	  }
+
+	  function syncPlayer(fbdata)
+	  {
+	    // check if player exists in DB
+	    const url = "https://us-central1-augmented-path-196206.cloudfunctions.net/get";
+	    fetch(url, {
+	        method : "POST",
+	        body : JSON.stringify({
+	          kind: "Player",
+	          key: fbdata.id
+	        })
+	      }).then(
+	          response => response.text()
+	      ).then(
+	        entity => {
+	          if (entity.length == 0) {
+	            console.log("No entry found, creating player data.");
+	            createPlayer(fbdata);
+	          }
+	          else {
+	            console.log("Entity found:" + entity);
+	          }
+	        }
+	    );
+	  }
+
+
+	  // Here we run a very simple test of the Graph API after login is
+	  // successful.  See statusChangeCallback() for when this call is made.
+	  function testAPI() {
+	    console.log('Welcome!  Fetching your information.... ');
+	    FB.api('/me', function(fbdata) {
+				playerdata.fbdata = fbdata;
+	      console.log(fbdata);
+	      syncPlayer(fbdata);
+				createLoggedInPanel();
+
+	    });
+	  }
+
+
+
 		function init() {
 
 			initGraphics();
@@ -265,6 +440,174 @@
 
 			initInput();
 
+			updateHud();
+
+		}
+
+		function updateGameState()
+		{
+			updateHud();
+		}
+
+		var panel;
+
+		function startLoginPrompt()
+		{
+			if (panel != null)
+				panel.open();
+		}
+
+		function facebookLogout()
+		{
+			FB.logout();
+			playerdata.bulletCount = 0;
+			playerdata.fbdata = null;
+			createLoggedOutPanel();
+		}
+
+		function facebookLogin()
+		{
+			FB.login(function(response) {
+		   	if (response.authResponse) {
+					testAPI();
+		   	}
+	     	else {
+	     		console.log('User cancelled login or did not fully authorize.');
+	    	}
+			});
+		}
+
+		function resetLevel()
+		{
+			rigidBodies.forEach(function(i) {
+				scene.remove(i);
+				physicsWorld.removeRigidBody( i.userData.physicsBody );
+			});
+
+			createDestructibles();
+		}
+
+		function createLoggedInPanel() {
+			if (panel != null) panel.destroy();
+			panel = new dat.GUI( { width: 350 } );
+
+			var logout = panel.addFolder('Logged in as ' + playerdata.fbdata.name);
+
+			settings = {
+				'Reset level': resetLevel,
+				'Log out': facebookLogout
+			}
+
+			logout.add (settings, 'Reset level');
+			logout.addColor (gunSettings, 'bulletColor');
+			logout.add(gunSettings, 'bulletSpeed', 10, 200).step(10);
+			logout.add(gunSettings, 'bulletPower', 1, 50).step(1);
+			logout.add(gunSettings, 'bulletSize', 0.1, 2.0).step(0.1);
+			logout.add (settings, 'Log out');
+			logout.open();
+		}
+
+		function createLoggedOutPanel() {
+			if (panel != null) panel.destroy();
+			panel = new dat.GUI( { width: 350 } );
+
+			var login = panel.addFolder('Out of bullets? Login for\ninfinite ammo and weapon options');
+
+			settings = {
+				'Click here to log in': facebookLogin
+			}
+
+			login.add (settings, 'Click here to log in');
+			login.open();
+			/*
+			var folder1 = panel.addFolder( 'Visibility' );
+			var folder2 = panel.addFolder( 'Activation/Deactivation' );
+			var folder3 = panel.addFolder( 'Pausing/Stepping' );
+			var folder4 = panel.addFolder( 'Crossfading' );
+			var folder5 = panel.addFolder( 'Blend Weights' );
+			var folder6 = panel.addFolder( 'General Speed' );
+
+
+
+			settings = {
+				'show model':            true,
+				'show skeleton':         false,
+				'deactivate all':        deactivateAllActions,
+				'activate all':          activateAllActions,
+				'pause/continue':        pauseContinue,
+				'make single step':      toSingleStepMode,
+				'modify step size':      0.05,
+				'from walk to idle':     function () { prepareCrossFade( walkAction, idleAction, 1.0 ) },
+				'from idle to walk':     function () { prepareCrossFade( idleAction, walkAction, 0.5 ) },
+				'from walk to run':      function () { prepareCrossFade( walkAction, runAction, 2.5 ) },
+				'from run to walk':      function () { prepareCrossFade( runAction, walkAction, 5.0 ) },
+				'use default duration':  true,
+				'set custom duration':   3.5,
+				'modify idle weight':    0.0,
+				'modify walk weight':    1.0,
+				'modify run weight':     0.0,
+				'modify time scale':     1.0
+			};
+
+			folder1.add( settings, 'show model' ).onChange( showModel );
+			folder1.add( settings, 'show skeleton' ).onChange( showSkeleton );
+			folder2.add( settings, 'deactivate all' );
+			folder2.add( settings, 'activate all' );
+			folder3.add( settings, 'pause/continue' );
+			folder3.add( settings, 'make single step' );
+			folder3.add( settings, 'modify step size', 0.01, 0.1, 0.001 );
+			crossFadeControls.push( folder4.add( settings, 'from walk to idle' ) );
+			crossFadeControls.push( folder4.add( settings, 'from idle to walk' ) );
+			crossFadeControls.push( folder4.add( settings, 'from walk to run' ) );
+			crossFadeControls.push( folder4.add( settings, 'from run to walk' ) );
+			folder4.add( settings, 'use default duration' );
+			folder4.add( settings, 'set custom duration', 0, 10, 0.01 );
+			folder5.add( settings, 'modify idle weight', 0.0, 1.0, 0.01 ).listen().onChange( function ( weight ) { setWeight( idleAction, weight ) } );
+			folder5.add( settings, 'modify walk weight', 0.0, 1.0, 0.01 ).listen().onChange( function ( weight ) { setWeight( walkAction, weight ) } );
+			folder5.add( settings, 'modify run weight', 0.0, 1.0, 0.01 ).listen().onChange( function ( weight ) { setWeight( runAction, weight ) } );
+			folder6.add( settings, 'modify time scale', 0.0, 1.5, 0.01 ).onChange( modifyTimeScale );
+
+			folder1.open();
+			folder2.open();
+			folder3.open();
+			folder4.open();
+			folder5.open();
+			folder6.open();
+
+			crossFadeControls.forEach( function ( control ) {
+
+				control.classList1 = control.domElement.parentElement.parentElement.classList;
+				control.classList2 = control.domElement.previousElementSibling.classList;
+
+				control.setDisabled = function () {
+
+					control.classList1.add( 'no-pointer-events' );
+					control.classList2.add( 'control-disabled' );
+
+				};
+
+				control.setEnabled = function () {
+
+					control.classList1.remove( 'no-pointer-events' );
+					control.classList2.remove( 'control-disabled' );
+
+				};
+
+			} );
+			*/
+			panel.close();
+		}
+
+
+
+		function updateHud() {
+			if (playerdata.isLoggedIn)
+			{
+				document.getElementById( 'ammo' ).innerHTML = ("BULLETS: ∞");
+			}
+			else {
+				document.getElementById( 'ammo' ).innerHTML = ("BULLETS: " + playerdata.bulletCount);
+			}
 		}
 
 		function loadGlbModels() {
@@ -415,7 +758,7 @@
 
 			renderer.gammaInput = true;
 			renderer.gammaOutput = true;
-			renderer.toneMapping = THREE.ReinhardToneMapping;
+			renderer.toneMapping = THREE.Uncharted2ToneMapping;
 			renderer.toneMappingExposure = 0.5;
 
 
@@ -480,21 +823,8 @@
 
 		}
 
-		function createObjects() {
-
-			// Ground
-			pos.set( 0, -0.5, 0 );
-			quat.set( 0, 0, 0, 1 );
-			var ground = createParalellepipedWithPhysics( 120, 1, 240, 0, pos, quat, new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
-			ground.receiveShadow = true;
-			textureLoader.load( "textures/grid.png", function( texture ) {
-				texture.wrapS = THREE.RepeatWrapping;
-				texture.wrapT = THREE.RepeatWrapping;
-				texture.repeat.set( 20, 40 );
-				ground.material.map = texture;
-				ground.material.needsUpdate = true;
-			} );
-
+		function createDestructibles()
+		{
 			// Tower 1
 			var towerMass = 1000;
 			var towerHalfExtents = new THREE.Vector3( 6, 15, 6 );
@@ -543,6 +873,25 @@
 			mountain.quaternion.copy( quat );
 			convexBreaker.prepareBreakableObject( mountain, mountainMass, new THREE.Vector3(), new THREE.Vector3(), true );
 			createDebrisFromBreakableObject( mountain );
+
+		}
+
+		function createObjects() {
+
+			// Ground
+			pos.set( 0, -0.5, 0 );
+			quat.set( 0, 0, 0, 1 );
+			var ground = createParalellepipedWithPhysics( 120, 1, 240, 0, pos, quat, new THREE.MeshPhongMaterial( { color: 0xFFFFFF } ) );
+			ground.receiveShadow = true;
+			textureLoader.load( "textures/grid.png", function( texture ) {
+				texture.wrapS = THREE.RepeatWrapping;
+				texture.wrapT = THREE.RepeatWrapping;
+				texture.repeat.set( 20, 40 );
+				ground.material.map = texture;
+				ground.material.needsUpdate = true;
+			} );
+
+			createDestructibles();
 
 		}
 
@@ -741,14 +1090,25 @@
 					- ( event.clientY / window.innerHeight ) * 2 + 1
 				);
 				*/
+				if (!playerdata.isLoggedIn)
+				{
+					if (playerdata.bulletCount <= 0)
+					{
+						startLoginPrompt();
+						return;
+					}
+				}
 
 				mouseCoords.set(0, 0);
 
 				raycaster.setFromCamera( mouseCoords, camera );
 
 				// Creates a ball and throws it
-				var ballMass = 100;
-				var ballRadius = 0.1;
+				var ballMass = gunSettings.bulletPower;
+				var ballRadius = gunSettings.bulletSize;
+				ballMaterial.color.setRGB(gunSettings.bulletColor[0]/255,
+																	gunSettings.bulletColor[1]/255,
+																	gunSettings.bulletColor[2]/255);
 
 				var ball = new THREE.Mesh( new THREE.SphereGeometry( ballRadius, 14, 10 ), ballMaterial );
 				ball.castShadow = true;
@@ -762,7 +1122,7 @@
 
 
 				pos.copy( raycaster.ray.direction );
-				pos.multiplyScalar( 120 );
+				pos.multiplyScalar( gunSettings.bulletSpeed );
 				ballBody.setLinearVelocity( new Ammo.btVector3( pos.x, pos.y, pos.z ) );
 
 				bullets.push(ball);
@@ -771,6 +1131,9 @@
 				var action = mixer.clipAction(clips[0]);
 				action.repetitions = 1;
 				action.reset().play();
+
+				playerdata.bulletCount--;
+				updateHud();
 
 			}, false );
 
@@ -887,8 +1250,6 @@
 				var vel = objPhys.getLinearVelocity();
 				objPhys.setLinearVelocity( new Ammo.btVector3( vel.x(), vel.y() + gravityConstant/ 80, vel.z() ) );
 			}
-
-
 
 			// Step world
 			physicsWorld.stepSimulation( deltaTime, 100 );
